@@ -4,7 +4,7 @@ exports.up = function (knex, Promise) {
         table.string("desc").notNull()
         table.datetime("estimateAt")
         table.datetime("doneAt")
-        table.integer("userId").references("id")
+        table.integer("id_user").references("id")
             .inTable("users").notNull()
     });
 };

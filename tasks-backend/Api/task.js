@@ -5,7 +5,7 @@ module.exports = app => {
         const date = request.query.date ? request.query.date : moment().endOf("day").toDate();
 
         app.db("tasks")
-            .where({ userId: request.user.id })
+            .where({ id_user: request.user.id })
             .where("estimateAt", "<=", date)
             .orderBy("estimateAt")
             .then(tasks => response.json(tasks))
@@ -16,7 +16,7 @@ module.exports = app => {
         if (!request.body.description.trim())
             return response.status(400).send("Descrição é um campo obrigatório");
 
-        request.body.userId = request.user.id;
+        request.body.id_user = request.user.id;
 
         app.db("tasks")
             .insert(request.body)
@@ -26,7 +26,7 @@ module.exports = app => {
 
     const remove = (request, response) => {
         app.db("tasks")
-            .where({ id: request.params.id, userId: request.user.id })
+            .where({ id: request.params.id, id_user: request.user.id })
             .del()
             .then(rowsDeleted => {
                 if (rowsDeleted > 0)
@@ -41,7 +41,7 @@ module.exports = app => {
 
     const updateTaskDoneAt = (request, response, doneAt) => {
         app.db("tasks")
-            .where({ id: request.params.id, userId: request.user.id })
+            .where({ id: request.params.id, id_user: request.user.id })
             .update({ doneAt })
             .then(() => response.status(204).send())
             .catch(error => response.status(400).json(error));
@@ -49,7 +49,7 @@ module.exports = app => {
 
     const toggleTask = (request, response) => {
         app.db("tasks")
-            .where({ id: request.params.id, userId: request.user.id})
+            .where({ id: request.params.id, id_user: request.user.id})
             .first()
             .then(task => {
                 if (!task)
