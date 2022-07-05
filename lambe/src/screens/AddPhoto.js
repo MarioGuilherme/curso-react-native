@@ -15,6 +15,8 @@ import {
 } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 
+const noUser = "Você precisa estar logado para adicionar imagens";
+
 class AddPhoto extends Component {
     state = {
         image: null,
@@ -22,31 +24,39 @@ class AddPhoto extends Component {
     };
 
     pickImage = () => {
-        launchImageLibrary({
-            mediaType: "photo",
-            includeBase64: true,
-            maxHeight: 600,
-            maxWidth: 800
-        }, response => {
-            if (!response.didCancel)
-                this.setState({ image: { uri: response.assets[0].uri, base64: response.assets[0].base64 } });
-        });
+        if (!this.props.name)
+            Alert.alert("Falha", noUser);
+        else {
+            launchImageLibrary({
+                mediaType: "photo",
+                includeBase64: true,
+                maxHeight: 600,
+                maxWidth: 800
+            }, response => {
+                if (!response.didCancel)
+                    this.setState({ image: { uri: response.assets[0].uri, base64: response.assets[0].base64 } });
+            });
+        }
     }
 
     save = async () => {
-        this.props.onAddPost({
-            id: Math.random(),
-            nickname: this.props.name,
-            email: this.props.email,
-            image: this.state.image,
-            comments: [{
+        if (!this.props.name)
+            Alert.alert("Falha", noUser);
+        else {
+            this.props.onAddPost({
+                id: Math.random(),
                 nickname: this.props.name,
-                comment: this.state.comment
-            }]
-        });
-
-        this.setState({ image: null, comment: ""});
-        this.props.navigation.navigate("Feed");
+                email: this.props.email,
+                image: this.state.image,
+                comments: [{
+                    nickname: this.props.name,
+                    comment: this.state.comment
+                }]
+            });
+    
+            this.setState({ image: null, comment: ""});
+            this.props.navigation.navigate("Feed");
+        }
     }
 
     render() {
@@ -64,7 +74,13 @@ class AddPhoto extends Component {
                             Escolha a foto
                         </Text>
                     </TouchableOpacity>
-                    <TextInput placeholder="Alguem comentário para a foto?" style={styles.input} value={this.state.comment} onChangeText={comment => this.setState({ comment })}/>
+                    <TextInput
+                        placeholder="Alguem comentário para a foto?"
+                        style={styles.input}
+                        editable={this.props.name != null}
+                        value={this.state.comment}
+                        onChangeText={comment => this.setState({ comment })}
+                    />
                     <TouchableOpacity onPress={this.save} style={styles.button}>
                         <Text style={styles.buttonText}>
                             Salvar
