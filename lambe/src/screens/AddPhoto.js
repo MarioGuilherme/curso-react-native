@@ -24,9 +24,9 @@ class AddPhoto extends Component {
     };
 
     pickImage = () => {
-        if (!this.props.name)
-            Alert.alert("Falha", noUser);
-        else {
+        // if (!this.props.name)
+        //     Alert.alert("Falha", noUser);
+        // else {
             launchImageLibrary({
                 mediaType: "photo",
                 includeBase64: true,
@@ -36,13 +36,13 @@ class AddPhoto extends Component {
                 if (!response.didCancel)
                     this.setState({ image: { uri: response.assets[0].uri, base64: response.assets[0].base64 } });
             });
-        }
+        // }
     }
 
     save = async () => {
-        if (!this.props.name)
-            Alert.alert("Falha", noUser);
-        else {
+        // if (!this.props.name)
+            // Alert.alert("Falha", noUser);
+        // else {
             this.props.onAddPost({
                 id: Math.random(),
                 nickname: this.props.name,
@@ -56,7 +56,7 @@ class AddPhoto extends Component {
     
             this.setState({ image: null, comment: ""});
             this.props.navigation.navigate("Feed");
-        }
+        // }
     }
 
     render() {
@@ -75,7 +75,7 @@ class AddPhoto extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TextInput
-                        placeholder="Alguem comentário para a foto?"
+                        placeholder="Algum comentário para a foto?"
                         style={styles.input}
                         editable={this.props.name != null}
                         value={this.state.comment}
