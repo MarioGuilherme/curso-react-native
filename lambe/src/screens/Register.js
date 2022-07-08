@@ -6,8 +6,10 @@ import {
     TouchableOpacity,
     TextInput
 } from "react-native";
+import { connect } from "react-redux";
+import { createUser } from "../store/actions/user";
 
-export default class Register extends Component {
+class Register extends Component {
     state = {
         name: "",
         email: "",
@@ -17,13 +19,31 @@ export default class Register extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput placeholder="Nome" style={styles.input}
-                    autoFocus={true} value={this.state.name} onChangeText={name => this.setState({ name })}/>
-                <TextInput placeholder="Email" style={styles.input} value={this.state.email}
-                    keyboardType="email-address" onChangeText={email => this.setState({ email })} />
-                <TextInput placeholder="Senha" style={styles.input}
-                    secureTextEntry={true} value={this.state.password} onChangeText={password => this.setState({ password })}/>
-                <TouchableOpacity onPress={() => {}} style={styles.button}>
+                <TextInput
+                    placeholder="Nome"
+                    style={styles.input}
+                    autoFocus={true}
+                    value={this.state.name}
+                    onChangeText={name => this.setState({ name })}
+                />
+                <TextInput
+                    placeholder="Email"
+                    style={styles.input}
+                    value={this.state.email}
+                    keyboardType="email-address"
+                    onChangeText={email => this.setState({ email })}
+                />
+                <TextInput
+                    placeholder="Senha"
+                    style={styles.input}
+                    secureTextEntry={true}
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
+                />
+                <TouchableOpacity
+                    onPress={() => this.props.onCreateUser(this.state)}
+                    style={styles.button}
+                >
                     <Text style={styles.buttonText}>Salvar</Text>
                 </TouchableOpacity>
             </View>
@@ -56,3 +76,11 @@ const styles = StyleSheet.create({
         paddingLeft: 15
     }
 });
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onCreateUser: user => dispatch(createUser(user))
+    };
+}
+
+export default connect(null, mapDispatchToProps)(Register);
