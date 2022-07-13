@@ -24,17 +24,15 @@ exports.uploadImage = functions.https.onRequest((request, response) => {
                     }
                 }
             }, (error, file) => {
-                if (error) {
-                    console.log(error)
+                if (error) 
                     return response.status(500).json({ error });
-                } else {
+                else {
                     const fileName = encodeURIComponent(file.name);
                     const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${fileName}?alt=media&token=${id}`;
                     return response.status(201).json({ imageUrl });
                 }
             });
         } catch (error) {
-            console.log(error)
             return response.status(500).json({ error });
         }
     });
